@@ -28,7 +28,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
       }
 
       if (roles && roles.length) // if a roles is required
-        return hasRole(roles);
+        return roles.includes(Authenticated) || hasRole(roles);
 
       return true;
     }

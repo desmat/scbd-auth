@@ -1,9 +1,0 @@
-export const Anyone = ['Kronos-FullAccess', 'Kronos-User', 'Kronos-Meeting-Nominator', 'Kronos-ReadOnly'];
-export const Administrators = ['Kronos-FullAccess'];
-export const Users = ['Kronos-FullAccess', 'Kronos-User'];
-export const UsersCanRead = ['Kronos-FullAccess', 'Kronos-User', 'Kronos-ReadOnly'];
-export const UsersCanDelete = ['Kronos-FullAccess'];
-export const UsersCanExport = ['Kronos-FullAccess', 'Kronos-DataExporter'];
-export const MeetingNominators = ['Kronos-FullAccess', 'Kronos-User', 'Kronos-Meeting-Nominator'];
-export const OrganizationValidators = ['Kronos-Organization-Validator'];
-export const HostGovernment = ['Kronos-FullAccess', 'Kronos-HostGovernment'];

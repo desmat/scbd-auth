@@ -11,7 +11,7 @@
 console.log('loggedin.vue load')
 
 definePageMeta({
-  roles: [...Administrators],  
+  roles: [Authenticated],
 });
 
 </script>
