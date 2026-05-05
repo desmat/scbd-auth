@@ -2,7 +2,9 @@ import type { RouteLocation } from "vue-router";
 
 export default defineNuxtPlugin(async (nuxtApp) => {
   addRouteMiddleware("auth", (to: RouteLocation) => {
-    const { isAuthenticated, hasRole, login } = useScbdAuth();
+    const { authMode } = useRuntimeConfig().public;
+    const { isAuthenticated, hasRole, login } = authMode === 'classic' ? useScbdAuthClassic() : useScbdAuth();
+
     const skipLoginPage = useCookie('skip-login-page');
 
     const isLoggedIn = toValue(isAuthenticated);

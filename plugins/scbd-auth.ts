@@ -17,6 +17,9 @@ export default defineNuxtPlugin(async (nuxtApp) => {
   const token = useState('auth:token', ()=>ref<string|null>(null))
   const user  = useState('auth:user',  ()=>ref<AuthUser|null>(toValue(Anonymous)))
 
+  const { authMode } = useRuntimeConfig().public
+  if (authMode === 'classic') return
+
   // Skip plugin when rendering error page
   if (nuxtApp.payload.error) {
     return;
