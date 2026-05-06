@@ -51,7 +51,7 @@ const defineNuxtPlugin = async (nuxtApp: any) => {
   }
 };
 
-export const scbdAuthPluginClassic = async (nuxtApp: any) => {
+export const scbdAuthClassicPlugin = async (nuxtApp: any) => {
   addRouteMiddleware("auth", scbdAuthMiddleware(useScbdAuthClassic), { global: true });
   return defineNuxtPlugin(nuxtApp);
 };
