@@ -1,5 +1,5 @@
 import type { AuthUser } from '../types/scbd-auth-user'
-import { getUser } from '../utils/scbd-auth-scheme'
+import { getUser } from './scbd-auth-scheme'
 
 const STORAGE_KEY_TOKEN = 'classic:token'
 const STORAGE_KEY_EXPIRATION = 'classic:tokenExpiration'
@@ -13,7 +13,7 @@ const Anonymous = (): AuthUser => ({
   roles: []
 })
 
-export default defineNuxtPlugin(async (nuxtApp) => {
+const defineNuxtPlugin = async (nuxtApp: any) => {
   const { authMode } = useRuntimeConfig().public
 
   if (authMode !== 'classic') return
@@ -49,4 +49,9 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     token.value = null
     user.value = Anonymous()
   }
-})
+};
+
+export const scbdAuthPluginClassic = async (nuxtApp: any) => {
+  addRouteMiddleware("auth", scbdAuthMiddleware(useScbdAuthClassic), { global: true });
+  return defineNuxtPlugin(nuxtApp);
+};
