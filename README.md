@@ -77,7 +77,7 @@ Create a login page (example with composition approach)
 </template>     
 
 <script setup lang="ts">
-const { isAuthenticated, logout, user } = useKronosAuth();
+const { isAuthenticated, logout, user } = useScbdAuth() // or useScbdAuthClassic()
 ...
 </script>
 ```
