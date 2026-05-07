@@ -13,7 +13,6 @@ export function useScbdAuthClassic(): IScbdAuth & { signIn(email: string, passwo
   const { authApiUrl } = useRuntimeConfig().public
 
   async function signIn(email: string, password: string): Promise<void> {
-    console.log('scbd-auth signIn', { email, password });
     const authToken = await apiSignIn(authApiUrl, email, password)
 
     token.value = authToken.authenticationToken
@@ -24,11 +23,7 @@ export function useScbdAuthClassic(): IScbdAuth & { signIn(email: string, passwo
   }
 
   function login(returnTo: Ref<string> | string | null = null) {
-    console.warn('use-scbd-auth-classic login', { returnTo });
-    // return;
-
     const returnUrl = toValue(returnTo) || '/'
-    console.warn('use-scbd-auth-classic login navigateTo', { returnUrl });
     return navigateTo({ path: '/login', query: { returnUrl } })
   }
 
