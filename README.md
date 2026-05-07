@@ -1,76 +1,83 @@
-# Nuxt Minimal Starter
+# SCBD Auth
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Everything needed to implement authentication/authorization in a Nuxt project. Standard (SSO) and classic (API) are available.
 
-## Setup
+## Local build
 
 Make sure to install dependencies:
 
 ```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
+# install dependencies
 yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
+# build
 yarn build
-
-# bun
-bun run build
 ```
 
-Locally preview production build:
+## Setup in a Nuxt project
 
-```bash
-# npm
-npm run preview
+Add the layer to your project
 
-# pnpm
-pnpm preview
+```ts
+// nuxt.config.ts
 
-# yarn
-yarn preview
-
-# bun
-bun run preview
+export default defineNuxtConfig({
+  ...
+  extends: [
+    'github:scbd/auth'
+  ],
+  ...
+})
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
-# scbd-auth
+Make sure Auth API URL is available to the environment
+
+```
+# .env (for example)
+
+NUXT_PUBLIC_AUTH_API_URL=...
+```
+
+Add plugin to initialize
+
+```ts
+// app/plugins/scbd-auth.ts
+
+// standard
+export default defineNuxtPlugin(scbdAuthPlugin) 
+
+// classic
+// export default defineNuxtPlugin(scbdAuthClassicPlugin)
+```
+
+Create a login page (example with composition approach)
+
+```html
+<!-- app/pages/login.vue -->
+
+<template>
+  ...
+    <div v-if="!isAuthenticated">
+      <!-- standard --> 
+      <ScbdAuthLoginForm />
+
+      <!-- classic -->
+      <!-- <ScbdAuthClassicLoginForm /> -->
+    </div>
+    <div v-else>
+      ...
+      <div>
+        You are logged in as {{ user?.name }}
+      </div>
+      ...
+      <CButton @click="logout('/')">
+        Logout
+      </CButton>
+    </div>
+  ...
+</template>     
+
+<script setup lang="ts">
+const { isAuthenticated, logout, user } = useKronosAuth();
+...
+</script>
+```
