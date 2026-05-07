@@ -1,7 +1,7 @@
 import type { AuthUser } from '../types/scbd-auth-user';
 import { useScbdAuthConfig } from './use-scbd-auth-config';
 
-export function useScbdAuth() {
+export function useScbdAuthSso() {
     const token = useState<string | null>('auth:token')
     const user = useState<AuthUser | null>('auth:user')
 

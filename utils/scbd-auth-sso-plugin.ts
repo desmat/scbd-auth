@@ -1,7 +1,7 @@
 import type { NuxtApp } from "#app";
 import type { AuthUser } from "../types/scbd-auth-user";
 
-import { initAuhtIFrame, getToken, getUser } from "../utils/scbd-auth-scheme";
+import { initAuhtIFrame, getToken, getUser } from "./scbd-auth-scheme";
 
 const Anonymous = ():AuthUser => ({
     userID: 1,
@@ -12,8 +12,7 @@ const Anonymous = ():AuthUser => ({
     roles: []
 });
 
-const defineNuxtPlugin = async (nuxtApp: NuxtApp) => {
-  
+const defineNuxtPlugin = async (nuxtApp: NuxtApp) => {  
   const token = useState('auth:token', ()=>ref<string|null>(null))
   const user  = useState('auth:user',  ()=>ref<AuthUser|null>(toValue(Anonymous)))
 
@@ -28,7 +27,7 @@ const defineNuxtPlugin = async (nuxtApp: NuxtApp) => {
   user .value = await getUser(token);
 };
 
-export const scbdAuthPlugin = async (nuxtApp: any) => {
-  addRouteMiddleware("auth", scbdAuthMiddleware(useScbdAuth), { global: true });
+export const scbdAuthSsoPlugin = async (nuxtApp: any) => {
+  addRouteMiddleware("auth", scbdAuthMiddleware(useScbdAuthSso), { global: true });
   return defineNuxtPlugin(nuxtApp);
 };

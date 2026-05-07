@@ -1,6 +1,6 @@
 # SCBD Auth
 
-Everything needed to implement authentication/authorization in a Nuxt project. Standard (SSO) and classic (API) are available.
+Everything needed to implement authentication/authorization in a Nuxt project. SSO and classic are available.
 
 ## Local build
 
@@ -43,7 +43,7 @@ Add plugin to initialize
 // app/plugins/scbd-auth.ts
 
 // standard
-export default defineNuxtPlugin(scbdAuthPlugin) 
+export default defineNuxtPlugin(scbdAuthSsoPlugin) 
 
 // classic
 // export default defineNuxtPlugin(scbdAuthClassicPlugin)
@@ -58,7 +58,7 @@ Create a login page (example with composition approach)
   ...
     <div v-if="!isAuthenticated">
       <!-- standard --> 
-      <ScbdAuthLoginForm />
+      <ScbdAuthSsoLoginForm />
 
       <!-- classic -->
       <!-- <ScbdAuthClassicLoginForm /> -->
@@ -77,7 +77,7 @@ Create a login page (example with composition approach)
 </template>     
 
 <script setup lang="ts">
-const { isAuthenticated, logout, user } = useScbdAuth() // or useScbdAuthClassic()
+const { isAuthenticated, logout, user } = useScbdAuthSso() // or useScbdAuthClassic()
 ...
 </script>
 ```

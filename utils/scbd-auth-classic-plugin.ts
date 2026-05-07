@@ -14,10 +14,6 @@ const Anonymous = (): AuthUser => ({
 })
 
 const defineNuxtPlugin = async (nuxtApp: any) => {
-  const { authMode } = useRuntimeConfig().public
-
-  if (authMode !== 'classic') return
-
   const token = useState('auth:token', () => ref<string | null>(null))
   const user = useState('auth:user', () => ref<AuthUser | null>(Anonymous()))
 

@@ -40,7 +40,7 @@
   setup
   lang="ts"
 >
-const { login } = useScbdAuth()
+const { login } = useScbdAuthSso()
 const { query } = useRoute()
 const skipLoginPage = useCookie('skip-login-page')
 
