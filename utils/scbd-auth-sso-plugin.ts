@@ -1,20 +1,12 @@
 import type { NuxtApp } from "#app";
+import { AnonymousUser } from "~/data/AnonymousUser";
 import type { AuthUser } from "../types/scbd-auth-user";
 
 import { initAuhtIFrame, getToken, getUser } from "./scbd-auth-scheme";
 
-const Anonymous = ():AuthUser => ({
-    userID: 1,
-    name: "anonymous",
-    email: "@anonymous",
-    isAuthenticated: false,
-    isEmailVerified: false,
-    roles: []
-});
-
 const defineNuxtPlugin = async (nuxtApp: NuxtApp) => {  
   const token = useState('auth:token', ()=>ref<string|null>(null))
-  const user  = useState('auth:user',  ()=>ref<AuthUser|null>(toValue(Anonymous)))
+  const user  = useState('auth:user',  ()=>ref<AuthUser|null>(AnonymousUser))
 
   // Skip plugin when rendering error page
   if (nuxtApp.payload.error) {
