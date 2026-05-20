@@ -1,9 +1,11 @@
 import type { AuthUser } from '../types/scbd-auth-user';
 import { useScbdAuthConfig } from './use-scbd-auth-config';
+import { useScbdAuthSession } from './use-scbd-auth-session';
 
 export function useScbdAuthSso() {
     const token = useState<string | null>('auth:token')
     const user = useState<AuthUser | null>('auth:user')
+    const session = useScbdAuthSession()
 
     const { loginUrl, logoutUrl, profileUrl } = useScbdAuthConfig();
 
@@ -11,6 +13,7 @@ export function useScbdAuthSso() {
         token: computed(() => token.value),
         user: computed(() => user.value),
         isAuthenticated: computed(() => user.value?.isAuthenticated === true),
+        getAuthorizationToken: session.getAuthorizationToken,
 
         login(returnTo: Ref<string> | string | null = null) {
             navigateToAndReturn(loginUrl, returnTo)

@@ -2,13 +2,13 @@ import type { IScbdAuth } from '../types/scbd-auth'
 import type { AuthUser } from '../types/scbd-auth-user'
 import { signIn as apiSignIn } from '../api/account'
 import { getUser } from '../utils/scbd-auth-scheme'
-
-const STORAGE_KEY_TOKEN = 'classic:token'
-const STORAGE_KEY_EXPIRATION = 'classic:tokenExpiration'
+import { STORAGE_KEY_EXPIRATION, STORAGE_KEY_TOKEN, useScbdAuthSession } from './use-scbd-auth-session'
 
 export function useScbdAuthClassic(): IScbdAuth & { signIn(email: string, password: string): Promise<void> } {
   const token = useState<string | null>('auth:token')
   const user = useState<AuthUser | null>('auth:user')
+  const tokenExpiration = useState<Date | null>('auth:tokenExpiration')
+  const session = useScbdAuthSession()
 
   const { authApiUrl } = useRuntimeConfig().public
 
@@ -18,6 +18,7 @@ export function useScbdAuthClassic(): IScbdAuth & { signIn(email: string, passwo
     token.value = authToken.authenticationToken
     localStorage.setItem(STORAGE_KEY_TOKEN, authToken.authenticationToken)
     localStorage.setItem(STORAGE_KEY_EXPIRATION, authToken.expiration.toISOString())
+    session.start(authToken.expiration)
 
     user.value = await getUser(token)
   }
@@ -30,7 +31,9 @@ export function useScbdAuthClassic(): IScbdAuth & { signIn(email: string, passwo
   function logout(_returnTo: Ref<string> | string | null = null) {
     localStorage.removeItem(STORAGE_KEY_TOKEN)
     localStorage.removeItem(STORAGE_KEY_EXPIRATION)
+    session.clearTimers()
     token.value = null
+    tokenExpiration.value = null
     user.value = null
     return navigateTo('/login')
   }
@@ -57,6 +60,7 @@ export function useScbdAuthClassic(): IScbdAuth & { signIn(email: string, passwo
     token: computed(() => token.value),
     user: computed(() => user.value),
     isAuthenticated: computed(() => user.value?.isAuthenticated === true),
+    getAuthorizationToken: session.getAuthorizationToken,
     login,
     logout,
     profile,

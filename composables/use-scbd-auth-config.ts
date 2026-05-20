@@ -1,13 +1,21 @@
 import type { AuthConfig } from '../types/scbd-auth-config';
 
+const DEFAULT_INACTIVITY_MINUTES = 30;
+
 export function useScbdAuthConfig(): AuthConfig {
-    const { authApiUrl } = useRuntimeConfig().public;
+    const { authApiUrl, authInactivityMinutes } = useRuntimeConfig().public;
+    const authApiBaseUrl = computed<string>(()=>String(authApiUrl || ''));
 
     return {
-        iframeUrl:  computed<string>(()=>`${authApiUrl}/app/authorize.html`),
-        loginUrl:   computed<string>(()=>`${authApiUrl}/signin`),
-        logoutUrl:  computed<string>(()=>`${authApiUrl}/signout`),
-        profileUrl: computed<string>(()=>`${authApiUrl}/profile`),
-        currenUserUrl: computed<string>(()=>`${authApiUrl}/api/v2013/authentication/user`),
+        authApiUrl: authApiBaseUrl,
+        iframeUrl:  computed<string>(()=>`${authApiBaseUrl.value}/app/authorize.html`),
+        loginUrl:   computed<string>(()=>`${authApiBaseUrl.value}/signin`),
+        logoutUrl:  computed<string>(()=>`${authApiBaseUrl.value}/signout`),
+        profileUrl: computed<string>(()=>`${authApiBaseUrl.value}/profile`),
+        currenUserUrl: computed<string>(()=>`${authApiBaseUrl.value}/api/v2013/authentication/user`),
+        inactivityMinutes: computed<number>(()=>{
+            const parsedInactivityMinutes = Number(authInactivityMinutes);
+            return parsedInactivityMinutes > 0 ? parsedInactivityMinutes : DEFAULT_INACTIVITY_MINUTES;
+        }),
     }
 }
