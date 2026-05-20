@@ -2,8 +2,8 @@ import { AnonymousUser } from '~/data/AnonymousUser'
 import type { TokenInvalidationReason } from '../types/scbd-auth'
 import type { AuthUser } from '../types/scbd-auth-user'
 
-export const STORAGE_KEY_TOKEN = 'classic:token'
-export const STORAGE_KEY_EXPIRATION = 'classic:tokenExpiration'
+export const STORAGE_KEY_TOKEN = 'scbd-auth:classic:token'
+export const STORAGE_KEY_EXPIRATION = 'scbd-auth:classic:tokenExpiration'
 
 let inactivityTimer: ReturnType<typeof setTimeout> | null = null
 let expirationTimer: ReturnType<typeof setTimeout> | null = null
