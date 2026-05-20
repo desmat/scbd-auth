@@ -92,12 +92,20 @@ export function useScbdAuthSession() {
     if (!import.meta.client || !token.value) return
 
     if (inactivityTimer) clearTimeout(inactivityTimer)
+    inactivityTimer = null
 
-    const inactivityDuration = toValue(inactivityMinutes) * 60 * 1000
+    const configuredInactivityMinutes = toValue(inactivityMinutes)
+
+    if (!configuredInactivityMinutes) {
+      inactivityExpiration.value = null
+      return
+    }
+
+    const inactivityDuration = configuredInactivityMinutes * 60 * 1000
     inactivityExpiration.value = new Date(Date.now() + inactivityDuration)
 
     inactivityTimer = setTimeout(() => {
-      console.log('use-scbd-auth-session resetInactivityTimer setTimeout', { inactivityMinutes: toValue(inactivityMinutes) })
+      console.log('use-scbd-auth-session resetInactivityTimer setTimeout', { inactivityMinutes: configuredInactivityMinutes })
       invalidate('inactivity')
     }, inactivityDuration)
   }
@@ -160,7 +168,7 @@ export function useScbdAuthSession() {
       return null
     }
 
-    const inactiveAt = inactivityExpiration.value
+    const inactiveAt = toValue(inactivityMinutes) ? inactivityExpiration.value : null
 
     if (inactiveAt && inactiveAt.getTime() <= Date.now()) {
       await invalidate('inactivity')

@@ -5,5 +5,5 @@ export interface AuthConfig {
   logoutUrl: ComputedRef<string>,
   profileUrl: ComputedRef<string>,
   currenUserUrl: ComputedRef<string>,
-  inactivityMinutes: ComputedRef<number>,
+  inactivityMinutes: ComputedRef<number | null>,
 }
