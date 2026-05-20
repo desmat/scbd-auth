@@ -173,11 +173,9 @@ export function useScbdAuthSession() {
   }
 
   return {
-    tokenExpiration: computed(() => tokenExpiration.value),
     clearTimers,
     getAuthorizationToken,
     invalidate,
-    resetInactivityTimer,
     start,
   }
 }
