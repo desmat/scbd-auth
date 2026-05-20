@@ -14,6 +14,7 @@ export function useScbdAuthSession() {
   const token = useState<string | null>('auth:token')
   const user = useState<AuthUser | null>('auth:user')
   const tokenExpiration = useState<Date | null>('auth:tokenExpiration')
+  const inactivityExpiration = useState<Date | null>('auth:inactivityExpiration')
 
   const { authApiUrl, inactivityMinutes } = useScbdAuthConfig()
   const nuxtApp = useNuxtApp()
@@ -39,6 +40,7 @@ export function useScbdAuthSession() {
     console.log('use-scbd-auth-session clearAuthState', {})
     token.value = null
     tokenExpiration.value = null
+    inactivityExpiration.value = null
     user.value = AnonymousUser
   }
 
@@ -91,14 +93,17 @@ export function useScbdAuthSession() {
 
     if (inactivityTimer) clearTimeout(inactivityTimer)
 
+    const inactivityDuration = toValue(inactivityMinutes) * 60 * 1000
+    inactivityExpiration.value = new Date(Date.now() + inactivityDuration)
+
     inactivityTimer = setTimeout(() => {
       console.log('use-scbd-auth-session resetInactivityTimer setTimeout', { inactivityMinutes: toValue(inactivityMinutes) })
       invalidate('inactivity')
-    }, toValue(inactivityMinutes) * 60 * 1000)
+    }, inactivityDuration)
   }
 
   function setServerExpiration(expiration: Date | string | null | undefined): void {
-    console.log('use-scbd-auth-session setServerExpiration', {})
+    console.log('use-scbd-auth-session setServerExpiration', { expiration })
     if (!import.meta.client) return
 
     if (expirationTimer) clearTimeout(expirationTimer)
@@ -133,7 +138,7 @@ export function useScbdAuthSession() {
   }
 
   function start(expiration: Date | string | null | undefined): void {
-    console.log('use-scbd-auth-session start', {})
+    console.log('use-scbd-auth-session start', { expiration })
     clearTimers()
 
     if (!import.meta.client || !token.value) return
@@ -152,6 +157,13 @@ export function useScbdAuthSession() {
 
     if (expiresAt && expiresAt.getTime() <= Date.now()) {
       await invalidate('serverExpiration')
+      return null
+    }
+
+    const inactiveAt = inactivityExpiration.value
+
+    if (inactiveAt && inactiveAt.getTime() <= Date.now()) {
+      await invalidate('inactivity')
       return null
     }
 
