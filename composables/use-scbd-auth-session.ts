@@ -10,6 +10,7 @@ let expirationTimer: ReturnType<typeof setTimeout> | null = null
 let invalidating = false
 
 export function useScbdAuthSession() {
+  // console.log('use-scbd-auth-session useScbdAuthSession', {})
   const token = useState<string | null>('auth:token')
   const user = useState<AuthUser | null>('auth:user')
   const tokenExpiration = useState<Date | null>('auth:tokenExpiration')
@@ -18,6 +19,7 @@ export function useScbdAuthSession() {
   const nuxtApp = useNuxtApp()
 
   function clearTimers(): void {
+    console.log('use-scbd-auth-session clearTimers', {})
     if (inactivityTimer) clearTimeout(inactivityTimer)
     if (expirationTimer) clearTimeout(expirationTimer)
 
@@ -26,6 +28,7 @@ export function useScbdAuthSession() {
   }
 
   function clearAuthStorage(): void {
+    console.log('use-scbd-auth-session clearAuthStorage', {})
     if (!import.meta.client) return
 
     localStorage.removeItem(STORAGE_KEY_TOKEN)
@@ -33,12 +36,14 @@ export function useScbdAuthSession() {
   }
 
   function clearAuthState(): void {
+    console.log('use-scbd-auth-session clearAuthState', {})
     token.value = null
     tokenExpiration.value = null
     user.value = AnonymousUser
   }
 
   async function deleteToken(authenticationToken: string | null): Promise<void> {
+    console.log('use-scbd-auth-session deleteToken', {})
     if (!authenticationToken) return
 
     try {
@@ -58,6 +63,7 @@ export function useScbdAuthSession() {
   }
 
   async function invalidate(reason: TokenInvalidationReason): Promise<void> {
+    console.log('use-scbd-auth-session invalidate', {})
     if (invalidating) return
 
     invalidating = true
@@ -80,6 +86,7 @@ export function useScbdAuthSession() {
   }
 
   function resetInactivityTimer(): void {
+    console.log('use-scbd-auth-session resetInactivityTimer', {})
     if (!import.meta.client || !token.value) return
 
     if (inactivityTimer) clearTimeout(inactivityTimer)
@@ -91,6 +98,7 @@ export function useScbdAuthSession() {
   }
 
   function setServerExpiration(expiration: Date | string | null | undefined): void {
+    console.log('use-scbd-auth-session setServerExpiration', {})
     if (!import.meta.client) return
 
     if (expirationTimer) clearTimeout(expirationTimer)
@@ -125,6 +133,7 @@ export function useScbdAuthSession() {
   }
 
   function start(expiration: Date | string | null | undefined): void {
+    console.log('use-scbd-auth-session start', {})
     clearTimers()
 
     if (!import.meta.client || !token.value) return
@@ -134,6 +143,7 @@ export function useScbdAuthSession() {
   }
 
   async function getAuthorizationToken(): Promise<string | null> {
+    console.log('use-scbd-auth-session getAuthorizationToken', {})
     const authenticationToken = toValue(token)
 
     if (!authenticationToken) return null
