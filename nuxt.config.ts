@@ -6,6 +6,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       authApiUrl: '',
+      authInactivityMinutes: 0, // positive value to opt-in
     }
   },  
   extends: [
